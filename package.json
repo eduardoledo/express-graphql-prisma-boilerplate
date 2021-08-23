@@ -8,9 +8,9 @@
   "scripts": {
     "start": "node dist/app.js",
     "startDev": "nodemon src/app.ts",
-    "build": "tsc -p .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p ."
   },
+  "heroku-run-build-script": true,
   "keywords": [],
   "author": "Eduardo Ledo <eduardo.ledo@gmail.com>",
   "license": "ISC",
