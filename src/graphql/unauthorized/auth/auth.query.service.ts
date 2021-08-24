@@ -28,7 +28,6 @@ export default class AuthQueryService {
             }
         });
 
-
         if (!user) {
             throw new Error(MESSAGE_INVALID_CREDENTIALS);
         }
@@ -60,5 +59,29 @@ export default class AuthQueryService {
             }
         });
         return result != null;
+    }
+    async register(email: string, password: string): Promise<LoginResult> {
+        let result = {
+            accessToken: "",
+            refreshToken: "",
+        };
+
+        let user = await prisma.user.findUnique({
+            where: {
+                email
+            }
+        });
+
+        if (!user) {
+            user = await prisma.user.create({
+                data: {
+                    email, password
+                }
+            });
+
+            result = await this.login(email, password);
+        }
+
+        return result;
     }
 }

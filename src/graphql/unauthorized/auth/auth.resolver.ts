@@ -9,6 +9,9 @@ const authResolver = {
         },
         logout(parent, { refreshToken }, ctx) {
             return authQueryService.logout(refreshToken);
+        },
+        register(parent, { email, password }, ctx) {
+            return authQueryService.register(email, password);
         }
     }
 };
