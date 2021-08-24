@@ -1,13 +1,14 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { generateTypeDefinitions, TypeDefinition } from "./type.generator";
-import { RESOLVERS } from "./resolver.register";
+import { generateResolverDefinitions } from './resolver.generator';
 
-export const generateSchema = (authorized = false) => {
+export const generateSchema = async (authorized = false) => {
 
     // Collect resolvers and type definitions based on auth
-    const resolvers = authorized ? RESOLVERS.authorized : RESOLVERS.unauthorized;
+    // const resolvers = authorized ? RESOLVERS.authorized : RESOLVERS.unauthorized;
+    const resolvers = authorized ? await generateResolverDefinitions(TypeDefinition.Authorized) : await generateResolverDefinitions(TypeDefinition.Unauthorized);
     const typeDefs = authorized ? generateTypeDefinitions(TypeDefinition.Authorized) : generateTypeDefinitions(TypeDefinition.Unauthorized);
-
+    
     return makeExecutableSchema({
         resolvers,
         typeDefs,
