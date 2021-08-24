@@ -5,7 +5,7 @@ type LoginResult {
 
 type Query {
     login(email: String!, password: String!): LoginResult!
-    logout(refreshToken: String!): Boolean!
+    logout(token: String!): Boolean!
     register(email: String!, password: String!): LoginResult!
-    refreshToken(refreshToken: String!): String!
+    refreshToken(token: String!): String!
 }

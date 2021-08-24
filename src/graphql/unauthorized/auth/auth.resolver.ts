@@ -7,11 +7,14 @@ const authResolver = {
         login(parent, { email, password }, ctx) {
             return authQueryService.login(email, password);
         },
-        logout(parent, { refreshToken }, ctx) {
-            return authQueryService.logout(refreshToken);
+        logout(parent, { token }, ctx) {
+            return authQueryService.logout(token);
         },
         register(parent, { email, password }, ctx) {
             return authQueryService.register(email, password);
+        },
+        refreshToken(parent, { token }, ctx) {
+            return authQueryService.refreshToken(token);
         }
     }
 };

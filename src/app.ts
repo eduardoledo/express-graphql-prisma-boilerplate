@@ -18,9 +18,4 @@ app.listen(process.env.PORT, () => {
     console.log(`Server listening on port: ${process.env.PORT}`);
 });
 
-// GraphQL Schema
-// Authorization
-// Authentication
-// Database
-// Routing?
-
+// TODO: ACL - Role and permission based authorization

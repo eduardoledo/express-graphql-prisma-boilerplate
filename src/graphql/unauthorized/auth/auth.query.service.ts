@@ -1,4 +1,4 @@
-import { MESSAGE_INVALID_CREDENTIALS } from "../../../helpers/messages";
+import { MESSAGE_INVALID_CREDENTIALS, MESSAGE_INVALID_TOKEN } from "../../../helpers/messages";
 import { generateAccessToken, generateRefreshToken } from "../../../middlewares/auth/auth.middleware";
 import { prisma } from "../../../prisma";
 import bcrypt from "bcrypt";
@@ -20,6 +20,19 @@ function validatePasswordHash(password, hash): Promise<boolean> {
     });
 }
 
+function generatePasswordHash(password): Promise<string> {
+    return new Promise((resolve, reject) => {
+        bcrypt.hash(password, 10, function(err, hash) {
+            if (err) {
+                reject(err);
+            }
+
+            resolve(hash);
+        });
+    });
+}
+
+
 export default class AuthQueryService {
     async login(email: string, password: string): Promise<LoginResult> {
         const user = await prisma.user.findFirst({
@@ -34,7 +47,7 @@ export default class AuthQueryService {
 
         try {
             const validPass = await validatePasswordHash(password, user.password);
-            if (!user) {
+            if (!validPass) {
                 throw new Error(MESSAGE_INVALID_CREDENTIALS);
             }
         } catch (error) {
@@ -49,13 +62,13 @@ export default class AuthQueryService {
             refreshToken,
         };
     }
-    async logout(refreshToken: string): Promise<boolean> {
+    async logout(token: string): Promise<boolean> {
         const result = await prisma.refreshToken.update({
             data: {
                 valid: false
             },
             where: {
-                token: refreshToken
+                token
             }
         });
         return result != null;
@@ -73,9 +86,12 @@ export default class AuthQueryService {
         });
 
         if (!user) {
+            console.log('before pass');
+            const hash = await generatePasswordHash(password)
+            console.log('after pass')
             user = await prisma.user.create({
                 data: {
-                    email, password
+                    email, password: hash
                 }
             });
 
@@ -83,5 +99,21 @@ export default class AuthQueryService {
         }
 
         return result;
+    }
+    async refreshToken(token: string): Promise<string> {
+        const refreshToken = await prisma.refreshToken.findUnique({
+            where: {
+                token
+            },
+            include: {
+                user: true
+            }
+        });
+
+        if (!(refreshToken && refreshToken.valid)) {
+            throw new Error(MESSAGE_INVALID_TOKEN);
+        }
+
+        return generateAccessToken({ email: refreshToken.user.email });
     }
 }
