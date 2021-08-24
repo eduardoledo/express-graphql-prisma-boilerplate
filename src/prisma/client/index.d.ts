@@ -32,7 +32,6 @@ export type User = {
   id: number
   email: string
   password: string
-  salt: string
 }
 
 
@@ -1627,21 +1626,18 @@ export namespace Prisma {
     id: number | null
     email: string | null
     password: string | null
-    salt: string | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: number | null
     email: string | null
     password: string | null
-    salt: string | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
     email: number
     password: number
-    salt: number
     _all: number
   }
 
@@ -1658,21 +1654,18 @@ export namespace Prisma {
     id?: true
     email?: true
     password?: true
-    salt?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
     email?: true
     password?: true
-    salt?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
     email?: true
     password?: true
-    salt?: true
     _all?: true
   }
 
@@ -1792,7 +1785,6 @@ export namespace Prisma {
     id: number
     email: string
     password: string
-    salt: string
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1818,7 +1810,6 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     password?: boolean
-    salt?: boolean
     tokens?: boolean | RefreshTokenFindManyArgs
   }
 
@@ -2495,8 +2486,7 @@ export namespace Prisma {
   export const UserScalarFieldEnum: {
     id: 'id',
     email: 'email',
-    password: 'password',
-    salt: 'salt'
+    password: 'password'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -2558,7 +2548,6 @@ export namespace Prisma {
     id?: IntFilter | number
     email?: StringFilter | string
     password?: StringFilter | string
-    salt?: StringFilter | string
     tokens?: RefreshTokenListRelationFilter
   }
 
@@ -2566,7 +2555,6 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     password?: SortOrder
-    salt?: SortOrder
   }
 
   export type UserWhereUniqueInput = {
@@ -2581,7 +2569,6 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter | number
     email?: StringWithAggregatesFilter | string
     password?: StringWithAggregatesFilter | string
-    salt?: StringWithAggregatesFilter | string
   }
 
   export type RefreshTokenCreateInput = {
@@ -2631,7 +2618,6 @@ export namespace Prisma {
   export type UserCreateInput = {
     email: string
     password: string
-    salt: string
     tokens?: RefreshTokenCreateNestedManyWithoutUserInput
   }
 
@@ -2639,14 +2625,12 @@ export namespace Prisma {
     id?: number
     email: string
     password: string
-    salt: string
     tokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    salt?: StringFieldUpdateOperationsInput | string
     tokens?: RefreshTokenUpdateManyWithoutUserInput
   }
 
@@ -2654,21 +2638,18 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    salt?: StringFieldUpdateOperationsInput | string
     tokens?: RefreshTokenUncheckedUpdateManyWithoutUserInput
   }
 
   export type UserUpdateManyMutationInput = {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    salt?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    salt?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter = {
@@ -3100,14 +3081,12 @@ export namespace Prisma {
   export type UserCreateWithoutTokensInput = {
     email: string
     password: string
-    salt: string
   }
 
   export type UserUncheckedCreateWithoutTokensInput = {
     id?: number
     email: string
     password: string
-    salt: string
   }
 
   export type UserCreateOrConnectWithoutTokensInput = {
@@ -3123,14 +3102,12 @@ export namespace Prisma {
   export type UserUpdateWithoutTokensInput = {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    salt?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateWithoutTokensInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    salt?: StringFieldUpdateOperationsInput | string
   }
 
   export type RefreshTokenCreateWithoutUserInput = {
