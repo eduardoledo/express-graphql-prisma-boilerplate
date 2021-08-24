@@ -29,4 +29,15 @@ export default class AuthQueryService {
             refreshToken,
         };
     }
+    async logout(refreshToken: string): Promise<boolean> {
+        const result = await prisma.refreshToken.update({
+            data: {
+                valid: false
+            },
+            where: {
+                token: refreshToken
+            }
+        });
+        return result != null;
+    }
 }

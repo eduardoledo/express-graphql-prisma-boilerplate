@@ -1,7 +1,5 @@
 import * as  express from 'express';
-import { PrismaClient } from '../../prisma/client';
 import * as jwt from 'jsonwebtoken';
-
 import { prisma } from '../../prisma';
 
 export function generateAccessToken(data) {
