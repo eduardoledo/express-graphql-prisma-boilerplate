@@ -4,4 +4,5 @@ model User {
       password String
       tokens   RefreshToken[]
       roles Role[]
+      permissions Permission[]
 }

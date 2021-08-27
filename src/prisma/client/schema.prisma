@@ -14,6 +14,12 @@ generator client {
 }
 
 
+model Permission {
+    id Int @id @default(autoincrement())
+    name String @unique @default("SUPER_ADMIN")
+    users User[]
+}
+
 model RefreshToken {
     id    Int    @id @default(autoincrement())
     user  User   @relation(fields: [userId], references: [id])
@@ -37,4 +43,5 @@ model User {
       password String
       tokens   RefreshToken[]
       roles Role[]
+      permissions Permission[]
 }

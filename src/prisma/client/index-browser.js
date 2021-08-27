@@ -70,6 +70,11 @@ Prisma.validator = () => (val) => val
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 function makeEnum(x) { return x; }
 
+exports.Prisma.PermissionScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name'
+});
+
 exports.Prisma.RefreshTokenScalarFieldEnum = makeEnum({
   id: 'id',
   userId: 'userId',
@@ -96,6 +101,7 @@ exports.Prisma.SortOrder = makeEnum({
 
 
 exports.Prisma.ModelName = makeEnum({
+  Permission: 'Permission',
   RefreshToken: 'RefreshToken',
   Role: 'Role',
   User: 'User'
