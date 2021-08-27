@@ -18,4 +18,4 @@ app.listen(process.env.PORT, () => {
     console.log(`Server listening on port: ${process.env.PORT}`);
 });
 
-// TODO: ACL - Role and permission based authorization
+// TODO: ACL - permission based authorization

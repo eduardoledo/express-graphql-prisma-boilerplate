@@ -2,8 +2,8 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { compose } from '../helpers/compose';
 import { generateTypeDefinitions, TypeDefinition } from "./type.generator";
 import { generateResolverDefinitions } from './resolver.generator';
-import { getAuthorizedDirective } from './directives/authorized.type';
-import { authorizedDirectiveTransformer } from './directives/authorized.service';
+import { authorizedDirectiveTransformer, getAuthorizedDirective } from './directives/authorized.type';
+
 
 export const generateSchema = async (authenticated = false) => {
 
