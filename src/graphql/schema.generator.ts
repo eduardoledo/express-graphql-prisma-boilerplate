@@ -1,16 +1,27 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { compose } from '../helpers/compose';
 import { generateTypeDefinitions, TypeDefinition } from "./type.generator";
 import { generateResolverDefinitions } from './resolver.generator';
+import { getAuthorizedDirective } from './directives/authorized.type';
+import { authorizedDirectiveTransformer } from './directives/authorized.service';
 
-export const generateSchema = async (authorized = false) => {
+export const generateSchema = async (authenticated = false) => {
 
     // Collect resolvers and type definitions based on auth
-    // const resolvers = authorized ? RESOLVERS.authorized : RESOLVERS.unauthorized;
-    const resolvers = authorized ? await generateResolverDefinitions(TypeDefinition.Authorized) : await generateResolverDefinitions(TypeDefinition.Unauthorized);
-    const typeDefs = authorized ? generateTypeDefinitions(TypeDefinition.Authorized) : generateTypeDefinitions(TypeDefinition.Unauthorized);
-    
-    return makeExecutableSchema({
+    const resolvers = authenticated ? await generateResolverDefinitions(TypeDefinition.Authenticated) : await generateResolverDefinitions(TypeDefinition.Unauthenticated);
+    const typeDefs = authenticated ? await generateTypeDefinitions(TypeDefinition.Authenticated) : await generateTypeDefinitions(TypeDefinition.Unauthenticated);
+    const authorizedDirective = (await getAuthorizedDirective());
+
+    const schema = compose(
+        (await authorizedDirectiveTransformer),
+        makeExecutableSchema
+    )({
+        typeDefs: [
+            authorizedDirective,
+            typeDefs,
+        ],
         resolvers,
-        typeDefs,
     });
+
+    return schema;
 };

@@ -3,17 +3,20 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 export const TypeDefinition = {
-    Authorized: 1,
-    Unauthorized: 0
+    Authenticated: 1,
+    Unauthenticated: 0
 };
 
-// Load GraphQL files for authorized schema
-const authorizedGraphql = glob.sync(join(__dirname, './authorized/**/*.graphql'));
+// Load GraphQL files for authenticated schema
+const authenticatedGraphql = glob.sync(join(__dirname, './authenticated/**/*.graphql'));
 
-// Load GraphQL files for unauthorized schema
-const unauthorizedGraphql = glob.sync(join(__dirname, './unauthorized/**/*.graphql'));
+// Load GraphQL files for unauthenticated schema
+const unauthenticatedGraphql = glob.sync(join(__dirname, './unauthenticated/**/*.graphql'));
+
+// Load GraphQL files for schema directives
+const directiveGraphql = glob.sync(join(__dirname, './directives/**/*.type.ts'));
 
 export const generateTypeDefinitions = (definitionType) => {
-    const toGenerate = definitionType === TypeDefinition.Authorized ? authorizedGraphql : unauthorizedGraphql;
+    const toGenerate = definitionType === TypeDefinition.Authenticated ? authenticatedGraphql : unauthenticatedGraphql;
     return toGenerate.map((item) => readFileSync(item).toString()).join('');
 };

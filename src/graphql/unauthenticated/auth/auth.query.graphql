@@ -1,8 +1,3 @@
-type LoginResult {
-    accessToken: String!
-    refreshToken: String!
-}
-
 type Query {
     login(email: String!, password: String!): LoginResult!
     logout(token: String!): Boolean!

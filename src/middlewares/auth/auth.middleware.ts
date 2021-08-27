@@ -44,12 +44,15 @@ export const AuthMiddleware = async (request: express.Request, response: express
         const user = await prisma.user.findUnique({
             where: {
                 email: data.email
+            },
+            include: {
+                roles: true
             }
         });
         if (user == null) {
             return response.sendStatus(401);
         }
-        Object.assign(request, { email: user.email, isAuthenticated: true });
+        Object.assign(request, { user, isAuthenticated: true });
     });
 
     next();

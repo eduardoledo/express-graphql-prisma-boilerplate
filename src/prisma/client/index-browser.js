@@ -78,6 +78,11 @@ exports.Prisma.RefreshTokenScalarFieldEnum = makeEnum({
   createdAt: 'createdAt'
 });
 
+exports.Prisma.RoleScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name'
+});
+
 exports.Prisma.UserScalarFieldEnum = makeEnum({
   id: 'id',
   email: 'email',
@@ -92,6 +97,7 @@ exports.Prisma.SortOrder = makeEnum({
 
 exports.Prisma.ModelName = makeEnum({
   RefreshToken: 'RefreshToken',
+  Role: 'Role',
   User: 'User'
 });
 

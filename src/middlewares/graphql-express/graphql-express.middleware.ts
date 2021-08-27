@@ -4,7 +4,7 @@ import { generateSchema } from "../../graphql/schema.generator";
 export const generateMiddlewareGraphql = () => {
     return graphqlHTTP(async (request) => {
         const isAuthenticated = request.hasOwnProperty('isAuthenticated') && request['isAuthenticated'] === true;
-        const user = request.hasOwnProperty('user') ?? request['user'];
+        const user = request['user'];
         const schema = await generateSchema(isAuthenticated);
         const context = {
             isAuthenticated
@@ -20,7 +20,7 @@ export const generateMiddlewareGraphql = () => {
             schema,
             context,
             customFormatErrorFn: (error) => error.message,
-            graphiql: true,
+            // graphiql: true,
         });
     });
 };
