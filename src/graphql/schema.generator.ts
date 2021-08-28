@@ -4,6 +4,7 @@ import { generateTypeDefinitions, TypeDefinition } from "./type.generator";
 import { generateResolverDefinitions } from './resolver.generator';
 import { hasRoleDirectiveTransformer, hasRoleDirectiveTypeDef } from './directives/hasRole';
 import { hasPermissionDirectiveTransformer, hasPermissionDirectiveTypeDef } from './directives/hasPermission';
+import { isAuthenticatedDirectiveTransformer, isAuthenticatedDirectiveTypeDef } from './directives/isAuthenticated';
 
 export const generateSchema = async (authenticated = false) => {
 
@@ -15,11 +16,13 @@ export const generateSchema = async (authenticated = false) => {
     const hasPermissionDirective = (await hasPermissionDirectiveTypeDef());
 
     const schema = compose(
+        isAuthenticatedDirectiveTransformer(authenticated),
         (await hasRoleDirectiveTransformer),
         (await hasPermissionDirectiveTransformer),
         makeExecutableSchema
     )({
         typeDefs: [
+            isAuthenticatedDirectiveTypeDef,
             hasRoleDirective,
             hasPermissionDirective,
             typeDefs,
