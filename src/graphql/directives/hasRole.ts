@@ -3,15 +3,14 @@ import { GraphQLSchema } from "graphql";
 import { prisma } from "../../prisma";
 import { Role } from "../../prisma/client";
 
-async function hasRoleDirective(directiveName: string, validationFn: (userRoles: Role[]) => { hasRole: (role: string) => boolean }, userRoles: Role[]) {
-  const validate = validationFn(userRoles).hasRole;
+async function hasRoleDirective(directiveName: string, validationFn: (role: string) => boolean) {
 
   return (schema: GraphQLSchema) => {
     const filter = (typeName, fieldName, fieldConfig): boolean => {
       const directive = getDirective(schema, fieldConfig, directiveName)?.[0];
       if (directive) {
         const { requires } = fieldConfig;
-        return validate(requires);
+        return validationFn(requires);
       }
       return true;
 
@@ -34,7 +33,7 @@ function validation(userRoles: Role[]) {
   };
 }
 
-export const hasRoleDirectiveTransformer = (userRoles: Role[] = []) => hasRoleDirective('hasRole', validation, userRoles);
+export const hasRoleDirectiveTransformer = (userRoles: Role[] = []) => hasRoleDirective('hasRole', validation(userRoles).hasRole);
 
 export const hasRoleDirectiveTypeDef = async (defaultValue = "ADMIN") => {
   const roles = (await prisma.role.findMany()).map(item => item.name);
