@@ -5,9 +5,9 @@ export const generateMiddlewareGraphql = () => {
     return graphqlHTTP(async (request) => {
         const isAuthenticated = request.hasOwnProperty('isAuthenticated') && request['isAuthenticated'] === true;
         const user = request['user'];
-        const schema = await generateSchema(isAuthenticated);
+        const schema = await generateSchema(isAuthenticated, user);
         const context = {
-            isAuthenticated
+            isAuthenticated,
         };
         if (isAuthenticated) {
             Object.assign(context, {

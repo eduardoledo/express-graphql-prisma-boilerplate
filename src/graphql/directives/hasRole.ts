@@ -1,44 +1,31 @@
-import { getDirective, mapSchema, MapperKind } from "@graphql-tools/utils";
+import { getDirective, mapSchema, MapperKind, filterSchema } from "@graphql-tools/utils";
 import { GraphQLSchema } from "graphql";
 import { prisma } from "../../prisma";
 import { Role } from "../../prisma/client";
 
-const defaultFieldResolver = function (source, args, context, info) { };
+async function hasRoleDirective(directiveName: string, validationFn: (userRoles: Role[]) => { hasRole: (role: string) => boolean }, userRoles: Role[]) {
+  const validate = validationFn(userRoles).hasRole;
 
-function hasRoleDirective(directiveName: string, getUserFn: (userRoles: Role[]) => Promise<{ hasRole: (role: string) => boolean }>) {
-  const typeDirectiveArgumentMaps: Record<string, any> = {};
-  return (schema: GraphQLSchema) => mapSchema(schema, {
-    [MapperKind.TYPE]: (type) => {
-      const authDirective = getDirective(schema, type, directiveName)?.[0];
-      if (authDirective) {
-        typeDirectiveArgumentMaps[type.name] = authDirective;
+  return (schema: GraphQLSchema) => {
+    const filter = (typeName, fieldName, fieldConfig): boolean => {
+      const directive = getDirective(schema, fieldConfig, directiveName)?.[0];
+      if (directive) {
+        const { requires } = fieldConfig;
+        return validate(requires);
       }
-      return undefined;
-    },
-    [MapperKind.OBJECT_FIELD]: (fieldConfig, _fieldName, typeName) => {
-      const authDirective = getDirective(schema, fieldConfig, directiveName)?.[0] ?? typeDirectiveArgumentMaps[typeName];
-      if (authDirective) {
-        const { requires } = authDirective;
-        if (requires) {
-          const { resolve = defaultFieldResolver } = fieldConfig;
-          fieldConfig.resolve = async function (source, args, context, info) {
-            if (!context.isAuthenticated) {
-              throw new Error('not authenticated');
-            }
-            const user = await getUserFn(context.user.roles);
-            if (!user.hasRole(requires)) {
-              throw new Error('not authorized');
-            }
-            return resolve(source, args, context, info);
-          }
-          return fieldConfig;
-        }
-      }
+      return true;
+
     }
-  });
+    return filterSchema({
+      schema,
+      fieldFilter: filter,
+      objectFieldFilter: filter,
+      rootFieldFilter: filter,
+    })
+  };
 }
 
-async function getUser(userRoles: Role[]) {
+function validation(userRoles: Role[]) {
   const roles = userRoles.map(item => item.name);
   return {
     hasRole: (role: string) => {
@@ -47,7 +34,7 @@ async function getUser(userRoles: Role[]) {
   };
 }
 
-export const hasRoleDirectiveTransformer = hasRoleDirective('hasRole', getUser);
+export const hasRoleDirectiveTransformer = (userRoles: Role[] = []) => hasRoleDirective('hasRole', validation, userRoles);
 
 export const hasRoleDirectiveTypeDef = async (defaultValue = "ADMIN") => {
   const roles = (await prisma.role.findMany()).map(item => item.name);
@@ -63,6 +50,5 @@ export const hasRoleDirectiveTypeDef = async (defaultValue = "ADMIN") => {
     enum Role {
       ${rolesDef}
     }
-`;
-
+  `;
 }
