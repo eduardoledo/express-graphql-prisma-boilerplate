@@ -10,10 +10,10 @@ export const TypeDefinition = {
 // Load GraphQL files for authenticated schema
 const authenticatedGraphql = glob.sync(join(__dirname, './authenticated/**/*.graphql'));
 
-// Load GraphQL files for unauthenticated schema
-const unauthenticatedGraphql = glob.sync(join(__dirname, './unauthenticated/**/*.graphql'));
+// Load GraphQL files for public schema
+const publicGraphql = glob.sync(join(__dirname, './public/**/*.graphql'));
 
 export const generateTypeDefinitions = (definitionType) => {
-    const toGenerate = definitionType === TypeDefinition.Authenticated ? authenticatedGraphql : unauthenticatedGraphql;
+    const toGenerate = definitionType === TypeDefinition.Authenticated ? authenticatedGraphql : publicGraphql;
     return toGenerate.map((item) => readFileSync(item).toString()).join('');
 };
