@@ -13,9 +13,6 @@ const authenticatedGraphql = glob.sync(join(__dirname, './authenticated/**/*.gra
 // Load GraphQL files for unauthenticated schema
 const unauthenticatedGraphql = glob.sync(join(__dirname, './unauthenticated/**/*.graphql'));
 
-// Load GraphQL files for schema directives
-const directiveGraphql = glob.sync(join(__dirname, './directives/**/*.type.ts'));
-
 export const generateTypeDefinitions = (definitionType) => {
     const toGenerate = definitionType === TypeDefinition.Authenticated ? authenticatedGraphql : unauthenticatedGraphql;
     return toGenerate.map((item) => readFileSync(item).toString()).join('');
