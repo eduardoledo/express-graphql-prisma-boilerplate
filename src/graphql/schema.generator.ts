@@ -30,7 +30,7 @@ export const generateSchema = async (authenticated = false, userObj?: User) => {
     const schema = compose(
         isAuthenticatedDirectiveTransformer(authenticated),
         (await hasRoleDirectiveTransformer(userRoles)),
-        (await hasPermissionDirectiveTransformer),
+        (await hasPermissionDirectiveTransformer(userPermissions)),
         makeExecutableSchema
     )({
         typeDefs: [
