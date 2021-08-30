@@ -22,7 +22,7 @@ function validatePasswordHash(password, hash): Promise<boolean> {
 
 function generatePasswordHash(password): Promise<string> {
     return new Promise((resolve, reject) => {
-        bcrypt.hash(password, 10, function(err, hash) {
+        bcrypt.hash(password, 10, function (err, hash) {
             if (err) {
                 reject(err);
             }
@@ -63,6 +63,18 @@ export default class AuthQueryService {
         };
     }
     async logout(token: string): Promise<boolean> {
+        const refreshToken = await prisma.refreshToken.findUnique({
+            where: {
+                token
+            },
+            include: {
+                user: true
+            }
+        });
+        if (!(refreshToken != null && refreshToken.valid)) {
+            throw new Error('Invalid token');
+        }
+
         const result = await prisma.refreshToken.update({
             data: {
                 valid: false
@@ -73,6 +85,7 @@ export default class AuthQueryService {
         });
         return result != null;
     }
+    
     async register(email: string, password: string): Promise<LoginResult> {
         let result = {
             accessToken: "",
