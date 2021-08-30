@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "startDev": "nodemon src/app.ts",
-    "build": "tsc -p ."
+    "build": "npx prisma-merge && npx prisma generate && tsc -p ."
   },
   "heroku-run-build-script": true,
   "keywords": [],
