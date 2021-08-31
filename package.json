@@ -1,14 +1,15 @@
 {
   "name": "ts-express-graphql-server-boilerplate",
   "version": "1.0.0",
-  "description": "",
+  "description": "A boilerplate project for creating a GraphQL API using nodejs with typescript express and prisma",
   "prisma": {
     "schema": "./src/prisma/schema.prisma"
   },
   "scripts": {
     "start": "node dist/app.js",
     "startDev": "nodemon src/app.ts",
-    "build": "npx prisma-merge && npx prisma generate && tsc -p ."
+    "compileDBModels": "npx prisma-merge && npx prisma generate",
+    "build": "npm run compileDBModels && tsc -p ."
   },
   "heroku-run-build-script": true,
   "keywords": [],
