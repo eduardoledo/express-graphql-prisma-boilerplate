@@ -2,7 +2,7 @@
 A boilerplate project for creating a [GraphQL](https://graphql.org/) API using [nodejs](https://nodejs.org/) with [typescript](https://www.typescriptlang.org/) [express](https://expressjs.com/) and [prisma](https://www.prisma.io/)
 
 # Getting started
-First things first: clone the repo and downloads all dependencies:  
+First things first: clone the repo and download all dependencies:  
 ```bash
 $ git clone https://github.com/eduardoledo/express-graphql-prisma-boilerplate  
 $ npm install
