@@ -239,6 +239,7 @@ Query {
   newField: String!
 }
 ```
+***IMPORTANT***: You have to put your types and resolvers inside the `src/graphql/public` directory if you want to use directives base authentication / authorization.
 
 There are three schema directives defined for this purpose:
 
@@ -279,3 +280,30 @@ Mutation {
   deleteUser(id: Int!): Boolean @hasPermission(requires: PERMISSION_DELETE_USER)
 }
 ```
+
+# Types and resolvers
+
+See [Authhorization / Authentication](#authorization--authentication) to decide the location of your schema and resolver files.
+It's recomended that you group your types and resolvers in directories for better organization.
+
+## Adding types
+
+GraphQL Schema files ***MUST*** have the `.grapql` extension to be automatically parsed and added to the schema (ie: `auth.query.graphql`). 
+If you define the same the same type in several files, the framework will try to merge all those definitions into one.
+
+## Adding resolvers
+
+Resolvers ***MUST*** have the `.resolver.ts` extension to be automatically associated with the types (ie: `auth.resolver.ts`). They should be in the same directory as the types they resolve.
+
+Each resolver receives three parameters:
+* `parent`
+* `arguments`
+* `context`
+
+The `parent` can be the root type (`Query`, `Mutation`, etc) or one of your own types.  
+The `arguments` parameter is a json object containing all the arguments that the type/field receives (if any).  
+The `context` is a json object  containing two fields: 
+* `ìsAuthenticated` (boolean)
+* `user`: An object representing a database user. Null if not authenticated
+
+
