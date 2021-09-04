@@ -3,9 +3,9 @@ import * as glob from 'glob';
 import { join } from 'path';
 import { TypeDefinition } from './type.generator';
 
-const authenticatedResolvers = glob.sync(join(__dirname, './authenticated/**/*.resolver.ts'));
+const authenticatedResolvers = glob.sync(join(__dirname, './authenticated/**/*.resolver.{ts,js}'));
 
-const publicResolvers = glob.sync(join(__dirname, './public/**/*.resolver.ts'));
+const publicResolvers = glob.sync(join(__dirname, './public/**/*.resolver.{ts,js}'));
 
 export const generateResolverDefinitions = async (definitionType): Promise<IResolvers<any, any, Record<string, any>, any>[]> => {
     const toGenerate = definitionType === TypeDefinition.Authenticated ? authenticatedResolvers : publicResolvers;
